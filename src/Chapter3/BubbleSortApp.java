@@ -106,7 +106,7 @@ a[two] = temp;
 nSwaps++;
 }
 //--------------------------------------------------------------
-public long find(int k) { // нахождение k наименьшего
+public long FindMin(int k) { // нахождение k наименьшего
 	int LeftB, RightB, i, j;
         long x, w;
 	LeftB = 0;
@@ -132,7 +132,7 @@ public long find(int k) { // нахождение k наименьшего
         return a[k];
 }
 //--------------------------------------------------------------
-public void randomArray(int size){
+public void randomArray(int size){ // создание случайного массива
     size++;
     Random r = new Random();
     int[] list = new int[size];
@@ -155,13 +155,13 @@ public static void main(String[] args)
 {
 long start;
 long timeWorkBub, timeWorkIns, timeWorkSel;
-int minK; // нахождение k наименьшего в массиве
+int min; // нахождение k наименьшего в массиве
 int maxSize = 10; //  115000 примерно 30 секунд для сортировки методом вставки
-minK=maxSize/2; // медиана
+min=maxSize/2; // медиана
 ArrayClass arrBub = new ArrayClass(maxSize);
 arrBub.randomArray(maxSize);
 arrBub.display();
-    System.out.println(minK + " наименьшее число в массиве = " + arrBub.find(minK-1));
+    System.out.println(min + " наименьшее число в массиве = " + arrBub.FindMin(min-1));
 arrBub.display();
 
 /*for(int j=0; j<maxSize; j++) // Заполнение массива случайными числами
