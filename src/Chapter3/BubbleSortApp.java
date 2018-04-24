@@ -132,7 +132,7 @@ public long FindMin(int k) { // нахождение k наименьшего
         return a[k];
 }
 //--------------------------------------------------------------
-public void randomArray(int size){ // создание случайного массива
+public void randomArrayNoDups(int size){ // создание случайного массива без повторов
     size++;
     Random r = new Random();
     int[] list = new int[size];
@@ -148,6 +148,24 @@ public void randomArray(int size){ // создание случайного ма
         }
     }
 //--------------------------------------------------------------
+public void noDups() {  // удаление дублей
+int k, v;
+int n = 0;
+long[] temp = a;
+int tempElems = nElems;
+for (int i=0; i<tempElems; i++){
+    a[n] = temp[i];
+    n++;
+    k = i;
+    v = i+1;
+    while ((v<tempElems)&&(temp[k]==temp[v])){
+      v++;
+      i++;
+      nElems--;      
+    }
+}
+}
+//--------------------------------------------------------------
 }
 class BubbleSortApp
 {
@@ -156,20 +174,19 @@ public static void main(String[] args)
 long start;
 long timeWorkBub, timeWorkIns, timeWorkSel;
 int min; // нахождение k наименьшего в массиве
-int maxSize = 10; //  115000 примерно 30 секунд для сортировки методом вставки
-min=maxSize/2; // медиана
+int maxSize = 20; //  115000 примерно 30 секунд для сортировки методом вставки
 ArrayClass arrBub = new ArrayClass(maxSize);
-arrBub.randomArray(maxSize);
-arrBub.display();
-    System.out.println(min + " наименьшее число в массиве = " + arrBub.FindMin(min-1));
-arrBub.display();
-
-/*for(int j=0; j<maxSize; j++) // Заполнение массива случайными числами
+for(int j=0; j<maxSize; j++) // Заполнение массива случайными числами
 {
-	long n = (long)( java.lang.Math.random()*(maxSize) );
-	arrBub.insert(n);
+    long n = (long)( java.lang.Math.random()*(maxSize) );
+    arrBub.insert(n);
 } 
+arrBub.insertionSort();
+arrBub.display();
+arrBub.noDups();
+arrBub.display();
 
+/*
 ArrayClass arrSel = arrBub.copy();
 ArrayClass arrIns = arrBub.copy();
 
