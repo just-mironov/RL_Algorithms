@@ -149,21 +149,17 @@ public void randomArrayNoDups(int size){ // создание случайног�
     }
 //--------------------------------------------------------------
 public void noDups() {  // удаление дублей
-int k, v;
-int n = 0;
-long[] temp = a;
-int tempElems = nElems;
-for (int i=0; i<tempElems; i++){
-    a[n] = temp[i];
-    n++;
-    k = i;
-    v = i+1;
-    while ((v<tempElems)&&(temp[k]==temp[v])){
-      v++;
-      i++;
-      nElems--;      
+int k = 0;    
+int i, n = 0;
+for (i=0; i<nElems; i++){
+    a[n] = a[i];
+    while ((i<nElems-1)&&(a[n]==a[i+1])) {
+        k++;
+        i++;
     }
+    n++;
 }
+nElems -= k;
 }
 //--------------------------------------------------------------
 }
