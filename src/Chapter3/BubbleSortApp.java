@@ -132,8 +132,10 @@ public int insertionSort() {
             } else break;
         }
         a[in] = temp; // Вставить помеченный элемент
-        copyCount++;
+      //  copyCount++;
     }
+    System.out.println(copyCount);
+    System.out.println(compareCount);
     difficult = copyCount + compareCount;
     return difficult;
 }
@@ -208,12 +210,11 @@ class BubbleSortApp
 public static void main(String[] args) {
     int difficult=0;
     long timeWorkBub, timeWorkIns, timeWorkSel, timeoddEven;
-    int maxSize = 10; //  500000 примерно 27 секунд для сортировки методом вставки
+    int maxSize = 100; //  500000 примерно 27 секунд для сортировки методом вставки
     int Repeats = 1;
     for (int i=0; i<Repeats; i++){
         ArrayClass arrBub = new ArrayClass(maxSize);
 //        for(int j=0; j<maxSize; j++) { // Заполнение массива случайными числами
-//            if (j!=10) {
 //                long n = (long)( java.lang.Math.random()*(maxSize) );
 //                arrBub.insert(n);
 //        }
