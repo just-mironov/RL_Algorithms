@@ -7,7 +7,6 @@ class ArrayClass implements Cloneable
 private long[] a; 
 private int nElems; 
 int nSwaps; 
-//--------------------------------------------------------------
 public ArrayClass(int max) 
 {
 a = new long[max];
@@ -35,21 +34,21 @@ nElems++;
 //--------------------------------------------------------------
 public void insertBack(long N) // вставка по уменьшению
 {
-long k = N-1;
-	for (int i = 0; i<N; i++){
+long k = N;
+	for (int i = nElems; i<N; i++){
+        nElems++;
 	a[i] = k; 
 	k--;
-	nElems++;
 	}
 }
 //--------------------------------------------------------------
 public void insertForw(long N) // вставка по возрастанию
 {
 long k = 0;
-	for (int i = 0; i<N; i++){
+	for (int i = nElems; i<N; i++){
+        nElems++;
 	a[i] = k; 
 	k++;
-	nElems++;
 	}
 }
 //--------------------------------------------------------------
@@ -60,7 +59,26 @@ System.out.print(a[j] + " ");
 System.out.println("");
 }
 //--------------------------------------------------------------
-public void bubbleSort()
+public void oddEvenSort() //сортировка методом четного/нечётного
+{
+boolean flag;
+int n = 0;
+do {
+    flag = false;
+    for (int i = 0; i < nElems; i+=2) if (a[i]>a[i+1]) {
+        swap(i, i+1);
+        flag = true;
+    }
+    for (int i = 1; i < nElems-1; i+=2) if (a[i]>a[i+1]) {
+        swap(i, i+1);
+        flag = true;
+    }
+    n++;
+} while (flag);
+  //  System.out.println("Количество проходов обработки: " + n);
+}
+//--------------------------------------------------------------
+public void bubbleSort()  //пузырьковая сортировка
 {
 int out, in;
 for(out=nElems-1; out>1; out--) 
@@ -82,20 +100,42 @@ swap(out, min); // Поменять их местами
 }
 }
 //--------------------------------------------------------------
-public void insertionSort()
-{
+public void insertionSortOld() {
 int in, out;
-for(out=1; out<nElems; out++) // out - разделительный маркер
-{
-long temp = a[out]; // Скопировать помеченный элемент
-in = out; // Начать перемещения с out
-while(in>0 && a[in-1] >= temp) // Пока не найден меньший элемент
-{
-a[in] = a[in-1]; // Сдвинуть элемент вправо
---in; // Перейти на одну позицию влево
+int copyCount = 0;
+int compareCount = 0; 
+for(out=1; out<nElems; out++) { // out - разделительный маркер
+    long temp = a[out]; // Скопировать помеченный элемент
+    in = out; // Начать перемещения с out
+    while(in>0 && a[in-1] >= temp)  { // Пока не найден меньший элемент
+       a[in] = a[in-1]; // Сдвинуть элемент вправо
+       --in; // Перейти на одну позицию влево
+    }
+    a[in] = temp; // Вставить помеченный элемент
 }
-a[in] = temp; // Вставить помеченный элемент
 }
+//--------------------------------------------------------------
+public int insertionSort() {
+    int difficult = 0;    
+    int copyCount = 0;
+    int compareCount = 0;
+    int in, out;
+    for(out=1; out<nElems; out++) { // out - разделительный маркер
+        long temp = a[out]; // Скопировать помеченный элемент
+      //  copyCount++;
+      //  compareCount++;
+        for (in=out;  in > 0; --in) {
+            compareCount++;
+            if (a[in-1]>=temp) {
+                a[in] = a[in-1];
+                copyCount++;
+            } else break;
+        }
+        a[in] = temp; // Вставить помеченный элемент
+        copyCount++;
+    }
+    difficult = copyCount + compareCount;
+    return difficult;
 }
 //--------------------------------------------------------------
 private void swap(int one, int two)
@@ -165,26 +205,29 @@ nElems -= k;
 }
 class BubbleSortApp
 {
-public static void main(String[] args)
-{
-long start;
-long timeWorkBub, timeWorkIns, timeWorkSel;
-int min; // нахождение k наименьшего в массиве
-int maxSize = 20; //  115000 примерно 30 секунд для сортировки методом вставки
-ArrayClass arrBub = new ArrayClass(maxSize);
-for(int j=0; j<maxSize; j++) // Заполнение массива случайными числами
-{
-    long n = (long)( java.lang.Math.random()*(maxSize) );
-    arrBub.insert(n);
-} 
-arrBub.insertionSort();
-arrBub.display();
-arrBub.noDups();
-arrBub.display();
-
-/*
+public static void main(String[] args) {
+    int difficult=0;
+    long timeWorkBub, timeWorkIns, timeWorkSel, timeoddEven;
+    int maxSize = 10; //  500000 примерно 27 секунд для сортировки методом вставки
+    int Repeats = 1;
+    for (int i=0; i<Repeats; i++){
+        ArrayClass arrBub = new ArrayClass(maxSize);
+//        for(int j=0; j<maxSize; j++) { // Заполнение массива случайными числами
+//            if (j!=10) {
+//                long n = (long)( java.lang.Math.random()*(maxSize) );
+//                arrBub.insert(n);
+//        }
+        arrBub.insertForw(maxSize);
+        arrBub.display();
+        difficult +=arrBub.insertionSort();
+        arrBub.display();
+    }
+    System.out.println("Прогнозируемая средняя сложность: " + (3*maxSize*maxSize/4));
+    System.out.println("Фактически средняя сложность: " + difficult/Repeats);
+  /*
 ArrayClass arrSel = arrBub.copy();
 ArrayClass arrIns = arrBub.copy();
+ArrayClass oddEven = arrBub.copy();
 
 start = System.currentTimeMillis();
 arrBub.bubbleSort(); 
@@ -198,10 +241,14 @@ start = System.currentTimeMillis();
 arrIns.insertionSort();
 timeWorkIns = System.currentTimeMillis() - start;
 
+start = System.currentTimeMillis();
+oddEven.oddEvenSort(); 
+timeoddEven = System.currentTimeMillis() - start;
+
 System.out.println("Время пузырьковой сортировки: " + timeWorkBub/1000 + " секунд");
 System.out.println("Время сортировки методом выбора: " + timeWorkSel/1000 + " секунд");
 System.out.println("Время сортировки методом вставки: " + timeWorkIns/1000 + " секунд");
-//System.out.println("Количество перестановок: " + arr.nSwaps);
+System.out.println("Время сортировки методом чётных/нечётных перестановок: " + timeWorkIns/1000 + " секунд");
 */
 }
 }
