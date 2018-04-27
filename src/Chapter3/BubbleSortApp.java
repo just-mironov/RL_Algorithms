@@ -134,8 +134,6 @@ public int insertionSort() {
         a[in] = temp; // Вставить помеченный элемент
       //  copyCount++;
     }
-    System.out.println(copyCount);
-    System.out.println(compareCount);
     difficult = copyCount + compareCount;
     return difficult;
 }
@@ -204,52 +202,64 @@ for (i=0; i<nElems; i++){
 nElems -= k;
 }
 //--------------------------------------------------------------
+public void quickSort(){
+    qSort(a, 0, nElems-1);
+}
+private void qSort (long[] A, int low, int high){
+    int i = low;
+    int j = high;
+    long x = A[low+(high-low)/2];
+      do {
+         while(A[i] < x) ++i;
+         while(A[j] > x) --j;
+         if(i <= j){
+            swap(i, j); i ++ ; j --;
+         }
+      } while(i <= j);
+      //рекурсивные вызовы функции qSort
+      if(low < j) qSort(A, low, j);
+      if(i < high) qSort(A, i, high);
+}
+//--------------------------------------------------------------
 }
 class BubbleSortApp
 {
 public static void main(String[] args) {
-    int difficult=0;
-    long timeWorkBub, timeWorkIns, timeWorkSel, timeoddEven;
-    int maxSize = 100; //  500000 примерно 27 секунд для сортировки методом вставки
-    int Repeats = 1;
-    for (int i=0; i<Repeats; i++){
-        ArrayClass arrBub = new ArrayClass(maxSize);
-//        for(int j=0; j<maxSize; j++) { // Заполнение массива случайными числами
-//                long n = (long)( java.lang.Math.random()*(maxSize) );
-//                arrBub.insert(n);
-//        }
-        arrBub.insertForw(maxSize);
-        arrBub.display();
-        difficult +=arrBub.insertionSort();
-        arrBub.display();
+    long startTime, timeInterval;
+    int maxSize = 10000000; //  500 000 примерно 27 секунд для сортировки методом вставки
+    ArrayClass arrBub = new ArrayClass(maxSize);
+    for(int j=0; j<maxSize; j++) { // Заполнение массива случайными числами
+        long n = (long)( java.lang.Math.random()*(maxSize) );
+        arrBub.insert(n);
     }
-    System.out.println("Прогнозируемая средняя сложность: " + (3*maxSize*maxSize/4));
-    System.out.println("Фактически средняя сложность: " + difficult/Repeats);
-  /*
-ArrayClass arrSel = arrBub.copy();
-ArrayClass arrIns = arrBub.copy();
-ArrayClass oddEven = arrBub.copy();
+//    ArrayClass arrSel = arrBub.copy();
+//    ArrayClass arrIns = arrBub.copy();
+//    ArrayClass oddEven = arrBub.copy();
+//    ArrayClass arrQuick = arrBub.copy();
 
-start = System.currentTimeMillis();
-arrBub.bubbleSort(); 
-timeWorkBub = System.currentTimeMillis() - start;
+//  startTime = System.currentTimeMillis();
+//  arrBub.bubbleSort(); 
+//  timeInterval = System.currentTimeMillis() - startTime;
+//  System.out.println("Время пузырьковой сортировки: " + timeInterval/1000 + " секунд");
 
-start = System.currentTimeMillis();
-arrSel.selectionSort();
-timeWorkSel = System.currentTimeMillis() - start;
+//    startTime = System.currentTimeMillis();
+//    arrSel.selectionSort();
+//    timeInterval = System.currentTimeMillis() - startTime;
+//    System.out.println("Время сортировки методом выбора: " + timeInterval/1000 + " секунд");
+    
+//    startTime = System.currentTimeMillis();
+//    arrIns.insertionSort();
+//    timeInterval = System.currentTimeMillis() - startTime;
+//    System.out.println("Время сортировки методом вставки: " + timeInterval/1000 + " секунд");
+    
+//    startTime = System.currentTimeMillis();
+//    oddEven.oddEvenSort(); 
+//    timeInterval = System.currentTimeMillis() - startTime;
+//    System.out.println("Время сортировки методом чётных/нечётных перестановок: " + timeInterval/1000 + " секунд");
 
-start = System.currentTimeMillis();
-arrIns.insertionSort();
-timeWorkIns = System.currentTimeMillis() - start;
-
-start = System.currentTimeMillis();
-oddEven.oddEvenSort(); 
-timeoddEven = System.currentTimeMillis() - start;
-
-System.out.println("Время пузырьковой сортировки: " + timeWorkBub/1000 + " секунд");
-System.out.println("Время сортировки методом выбора: " + timeWorkSel/1000 + " секунд");
-System.out.println("Время сортировки методом вставки: " + timeWorkIns/1000 + " секунд");
-System.out.println("Время сортировки методом чётных/нечётных перестановок: " + timeWorkIns/1000 + " секунд");
-*/
+    startTime = System.currentTimeMillis();
+    arrBub.quickSort(); 
+    timeInterval = System.currentTimeMillis() - startTime;
+    System.out.println("Время методом QuickSort: " + timeInterval/1000 + " секунд");
 }
 }
