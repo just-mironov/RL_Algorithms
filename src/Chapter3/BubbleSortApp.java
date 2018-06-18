@@ -2,15 +2,13 @@ package Chapter3;
 
 // bubbleSort.java
 import java.util.Random;
-class ArrayClass implements Cloneable
-{
+class ArrayClass implements Cloneable {
 private long[] a; 
 private int nElems; 
 int nSwaps; 
-public ArrayClass(int max) 
-{
-a = new long[max];
-nElems = 0; 
+public ArrayClass(int max) {
+    a = new long[max];
+    nElems = 0; 
 }
 //--------------------------------------------------------------
 public long[] getArray() { return a;  }
@@ -28,7 +26,7 @@ public ArrayClass (ArrayClass other) // копировать все поля к�
 //--------------------------------------------------------------
 public void insert(long value) 
 {
-a[nElems] = value; 
+a[nElems] = value;
 nElems++;
 }
 //--------------------------------------------------------------
@@ -115,7 +113,27 @@ for(out=1; out<nElems; out++) { // out - разделительный марке
 }
 }
 //--------------------------------------------------------------
-public int insertionSort() {
+public void noDupsByInsertion() {
+int in, out;
+for(out=1; out<nElems; out++) {
+    long temp = a[out]; 
+    for (in = out; in > 0; --in){
+        if (a[in-1] == temp) {
+            a[in-1] = -1;
+            break;
+        }
+    }
+}
+insertionSortOld();
+int j = 0;
+long temp;
+do temp = a[++j]; while (j<nElems&&temp==-1);
+out = j;
+for (int i = 0; j<nElems; i++, j++) a[i] = a[j];
+nElems -= out;
+}
+//--------------------------------------------------------------
+public int insertionSort() { //подсчитывает кол-во операций копирования и вставки
     int difficult = 0;    
     int copyCount = 0;
     int compareCount = 0;
@@ -226,7 +244,7 @@ class BubbleSortApp
 {
 public static void main(String[] args) {
     long startTime, timeInterval;
-    int maxSize = 10000000; //  500 000 примерно 27 секунд для сортировки методом вставки
+    int maxSize = 10; //  500 000 примерно 27 секунд для сортировки методом вставки
     ArrayClass arrBub = new ArrayClass(maxSize);
     for(int j=0; j<maxSize; j++) { // Заполнение массива случайными числами
         long n = (long)( java.lang.Math.random()*(maxSize) );
@@ -257,9 +275,13 @@ public static void main(String[] args) {
 //    timeInterval = System.currentTimeMillis() - startTime;
 //    System.out.println("Время сортировки методом чётных/нечётных перестановок: " + timeInterval/1000 + " секунд");
 
-    startTime = System.currentTimeMillis();
-    arrBub.quickSort(); 
-    timeInterval = System.currentTimeMillis() - startTime;
-    System.out.println("Время методом QuickSort: " + timeInterval/1000 + " секунд");
+//    startTime = System.currentTimeMillis();
+//    arrBub.quickSort(); 
+//    timeInterval = System.currentTimeMillis() - startTime;
+//    System.out.println("Время методом QuickSort: " + timeInterval/1000 + " секунд");
+
+    arrBub.display();
+    arrBub.noDupsByInsertion();
+    arrBub.display();
 }
 }
